@@ -5,3 +5,4 @@ logs
 *.env
 .vercel
 context.md
+.yarn
