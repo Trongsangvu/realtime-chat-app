@@ -1,4 +1,4 @@
-# 🚀 Realtime Chat App (Yarn 4)
+# 🚀 Realtime Chat App
 
 A real-time video & text chat app built with React, TypeScript, Socket.IO and PeerJS.
 
