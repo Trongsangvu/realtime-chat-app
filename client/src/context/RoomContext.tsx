@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState, useReducer, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import Peer from "peerjs";
-import { ws } from "../ws"
+import React, { createContext, useContext, useEffect, useReducer, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addAllPeersAction, addPeerNameAction, addPeerStreamAction, removePeerStreamAction } from "../reducers/peerActions";
 import { PeerState, peersReducer } from "../reducers/peerReducer";
-import { addPeerStreamAction, addPeerNameAction, removePeerStreamAction, addAllPeersAction } from "../reducers/peerActions";
+import { IPeer } from "../types/peer";
+import { ws } from "../ws";
 import { UserContext } from "./UserContext";
-import { IPeer } from "../types/peer"
 
 interface RoomValue {
     stream?: MediaStream;
@@ -48,6 +48,8 @@ export const RoomProvider: React.FC<ChildProps> = ({ children }) => {
         // console.log({ roomId });
         navigate(`/room/${roomId}`);
     };
+
+    const peerConnectionsRef = useRef<Map<string, RTCPeerConnection>>(new Map());
     
     const getUsers = ({
         participants
@@ -61,18 +63,18 @@ export const RoomProvider: React.FC<ChildProps> = ({ children }) => {
         dispatch(removePeerStreamAction(peerId));
     };
 
-    const switchStream = (stream: MediaStream) => {        
+    const switchStream = (stream: MediaStream) => {
+        const videoTrack = stream.getVideoTracks()[0];
+        if (!videoTrack) return;
+
         setScreenSharingId(me?.id || "");
 
-        Object.values(me?.connections || {}).forEach((connection: any) => {
-            const videoTrack: any = stream
-                ?.getTracks()
-                .find((track) => track.kind === "video");
-            connection[0].peerConnection
-                .getSenders()
-                .find((sender: any) => sender.track.kind === "video")
-                .replaceTrack(videoTrack) 
-                .catch((err: any) => console.error(err));
+        peerConnectionsRef.current.forEach((pc) => {
+            const sender = pc.getSenders().find(s => s.track?.kind === "video");
+
+            if (sender) {
+                sender.replaceTrack(videoTrack).catch(console.error);
+            }
         });
     };
 
