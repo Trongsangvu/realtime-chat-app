@@ -2,6 +2,7 @@
   "name": "webrtc-react",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",

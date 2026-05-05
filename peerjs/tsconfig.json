@@ -1,21 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2016",    
-    "module": "commonjs",
-    "moduleResolution": "node10",
-    "baseUrl": "./",  
-    "paths": {
-      "*": [
-        "node_modules/*"
-      ]
-    },
-    "ignoreDeprecations": "6.0",
+    "target": "es2016",
+    "module": "node16",
+    "moduleResolution": "node16",
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
 
-    /* Type Checking */
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
