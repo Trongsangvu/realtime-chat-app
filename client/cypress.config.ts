@@ -1,8 +1,21 @@
 import { defineConfig } from "cypress";
 import { WS } from "./src/ws"
 import socketIOClient from "socket.io-client";
+import type { Socket } from "socket.io-client";
 
-let ws;
+interface JoinRoomData {
+  roomId: string;
+  peerId: string;
+  userName: string;
+}
+
+interface EmitData {
+  event: string;
+  roomId: string;
+  eventData: unknown;
+}
+
+let ws: Socket | undefined;
 
 export default defineConfig({
   e2e: {
@@ -14,18 +27,18 @@ export default defineConfig({
 
           return null;
         },
-        joinRoom(data) {
+        joinRoom(data: JoinRoomData) {
           const {roomId, peerId, userName} = data;
-          ws.emit("join-room", {
+          ws?.emit("join-room", {
             roomId,
             peerId,
             userName,
           });
           return null;
         },
-        emit(data) {
+        emit(data: EmitData) {
           const {event, roomId, eventData} = data;
-          ws.emit(event, roomId, eventData);
+          ws?.emit(event, roomId, eventData);
           return null;
         }
       });
