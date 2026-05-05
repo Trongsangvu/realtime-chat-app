@@ -5,4 +5,7 @@ logs
 *.env
 .vercel
 context.md
-.yarn
+
+# Yarn Berry
+.yarn/cache
+.yarn/install-state.gz

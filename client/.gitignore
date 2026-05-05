@@ -24,5 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 
 
-.yarn
-.vercel
+# Yarn Berry
+.yarn/cache
+.yarn/install-state.gz
+
