@@ -5,23 +5,23 @@ import { ChatProvider } from "../context/ChatContext";
 import { RoomContext } from "../context/RoomContext";
 
 test("chat button toggles chat", () => {
-    render(
-        <ChatProvider>
-            <Room />
-        </ChatProvider>
-    );
-    
-    const chatButton = screen.getByTestId("chat-button");
-    fireEvent(
-        chatButton,
-        new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-        }),
-      );
-    
-    const textarea = screen.getByRole("textbox");
-    expect(textarea).toBeInTheDocument();
+  render(
+    <ChatProvider>
+      <Room />
+    </ChatProvider>
+  );
+
+  const chatButton = screen.getByTestId("chat-button");
+  fireEvent(
+    chatButton,
+    new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    }),
+  );
+
+  const textarea = screen.getByRole("textbox");
+  expect(textarea).toBeInTheDocument();
 });
 
 const customRender = (ui: any, providerProps = {}) => {
@@ -45,12 +45,12 @@ const customRender = (ui: any, providerProps = {}) => {
         },
       },
       screenSharingId: "",
-      shareScreen: () => {},
-      setRoomId: () => {},
+      shareScreen: () => { },
+      setRoomId: () => { },
       roomId: "q",
     },
   };
-  const props = {...defaultProps, ...providerProps}
+  const props = { ...defaultProps, ...providerProps };
   return render(
     <RoomContext.Provider {...props}>{ui}</RoomContext.Provider>
   );

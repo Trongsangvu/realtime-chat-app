@@ -1,3 +1,4 @@
+// @ts-ignore: CSS imports are not typed in this project setup.
 import './App.css';
 import { Join } from "./components/Join";
 
