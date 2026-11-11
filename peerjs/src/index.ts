@@ -1,3 +1,5 @@
 import { PeerServer } from "peer";
 
-PeerServer({ port: 9000, path: "/" });
+const port = Number(process.env.PORT) || 9000;
+
+PeerServer({ port, path: "/" });
