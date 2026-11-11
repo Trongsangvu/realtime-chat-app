@@ -37,6 +37,27 @@ if (!!window.Cypress) {
   window.Peer = Peer;
 }
 
+/**
+ * Get camera + mic, degrading gracefully when a device is missing or denied
+ * (NotFoundError / NotAllowedError). Falls back to audio-only, video-only,
+ * then an empty stream so the user can still join and watch/listen.
+ */
+const getLocalStream = async (): Promise<MediaStream> => {
+  const attempts: MediaStreamConstraints[] = [
+    { video: true, audio: true },
+    { video: false, audio: true },
+    { video: true, audio: false },
+  ];
+  for (const constraints of attempts) {
+    try {
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    } catch (error) {
+      console.warn("getUserMedia failed", constraints, error);
+    }
+  }
+  return new MediaStream();
+};
+
 export const RoomProvider = ({ children }: ChildProps) => {
   const navigate = useNavigate();
   const { userName, userId } = useContext(UserContext);
@@ -117,15 +138,7 @@ export const RoomProvider = ({ children }: ChildProps) => {
     });
     setMe(peer);
 
-    try {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          setStream(stream);
-        });
-    } catch (error) {
-      console.error(error);
-    }
+    getLocalStream().then(setStream);
     ws.on("room-created", enterRoom);
     ws.on("get-users", getUsers);
     ws.on("user-disconnected", removePeer);
@@ -142,7 +155,6 @@ export const RoomProvider = ({ children }: ChildProps) => {
       ws.off("user-joined");
       ws.off("name-changed");
       me?.disconnect();
-
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

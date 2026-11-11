@@ -30,22 +30,27 @@ test("chat button toggles chat", () => {
   expect(textarea).toBeInTheDocument();
 });
 
+const fakeStream = {
+  getVideoTracks: () => [{}],
+  getAudioTracks: () => [],
+} as unknown as MediaStream;
+
 const customRender = (ui: any, providerProps = {}) => {
   const defaultProps = {
     value: {
       peers: {
         'qew': {
-          stream: {} as MediaStream,
+          stream: fakeStream,
           userName: "",
           peerId: 'qewew',
         },
         'qewwgh': {
-          stream: {} as MediaStream,
+          stream: fakeStream,
           userName: "",
           peerId: 'qewewq',
         },
         'qeqghw': {
-          stream: {} as MediaStream,
+          stream: fakeStream,
           userName: "",
           peerId: 'qewewqa',
         },

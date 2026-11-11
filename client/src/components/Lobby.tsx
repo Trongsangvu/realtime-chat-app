@@ -40,7 +40,8 @@ export const Lobby = ({
     }
   };
 
-  const showAvatar = !stream || !camOn;
+  const hasCamera = !!stream && stream.getVideoTracks().length > 0;
+  const showAvatar = !hasCamera || !camOn;
 
   return (
     <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-6">
@@ -69,7 +70,11 @@ export const Lobby = ({
                 name={userName || "You"}
                 seed={userId || "you"}
               />
-              {!stream ? "Waiting for camera permission…" : "Camera is off"}
+              {!stream
+                ? "Waiting for camera permission…"
+                : !hasCamera
+                  ? "No camera found"
+                  : "Camera is off"}
             </div>
           )}
           <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3">

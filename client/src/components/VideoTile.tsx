@@ -25,7 +25,7 @@ export const VideoTile = ({
   mirror,
   className,
 }: VideoTileProps) => {
-  const showAvatar = !stream || cameraOff;
+  const showAvatar = !stream || stream.getVideoTracks().length === 0 || cameraOff;
 
   return (
     <div
