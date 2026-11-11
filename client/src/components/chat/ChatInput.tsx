@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
-import { Button } from "../common/Button";
 import { ChatContext } from "../../context/ChatContext";
-import { UserContext } from "../../context/UserContext";
 import { RoomContext } from "../../context/RoomContext";
+import { UserContext } from "../../context/UserContext";
+import { Button } from "../common/Button";
 
-export const ChatInput: React.FC = () => {
+export const ChatInput = () => {
   const [message, setMessage] = useState("");
   const { sendMessage } = useContext(ChatContext);
   const { userId } = useContext(UserContext);
   const { roomId } = useContext(RoomContext);
+
   return (
     <div>
       <form onSubmit={(e) => {

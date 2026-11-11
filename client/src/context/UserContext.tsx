@@ -17,7 +17,7 @@ interface UserProviderProps {
   children: React.ReactNode;
 };
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+export const UserProvider = ({ children }: UserProviderProps) => {
   // Create a new Id for the peer
   // const meId = savedId || uuidV4();
   const [userId] = useState(localStorage.getItem("userId") || uuidV4());

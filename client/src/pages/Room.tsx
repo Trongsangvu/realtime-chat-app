@@ -24,6 +24,7 @@ export const Room = () => {
 
   const { userName, userId } = useContext(UserContext);
   const { toggleChat, chat } = useContext(ChatContext);
+
   useEffect(() => {
     if (stream)
       ws.emit("join-room", { roomId: id, peerId: userId, userName });
@@ -52,16 +53,12 @@ export const Room = () => {
           </div>
         )}
 
-        <div className={`grid gap-4 
-                    ${screenSharingVideo ? "w-1/5 grid-col-1" : "grid-cols-4"
-          }`}
-        >
+        <div className={`grid gap-4 ${screenSharingVideo ? "w-1/5 grid-col-1" : "grid-cols-4"}`}>
           {screenSharingId !== userId && (
             <div>
               <VideoPlayer stream={stream} />
               <NameInput />
             </div>
-
           )}
 
           {Object.values(peersToShow as PeerState)

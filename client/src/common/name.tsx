@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
-export const NameInput: React.FC = () => {
+export const NameInput = () => {
   const { userName, setUserName } = useContext(UserContext);
   return (
     <input

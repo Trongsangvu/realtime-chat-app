@@ -1,8 +1,8 @@
 import Peer from "peerjs";
-import React, { createContext, useContext, useEffect, useReducer, useRef, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addAllPeersAction, addPeerNameAction, addPeerStreamAction, removePeerStreamAction } from "../reducers/peerActions";
-import { PeerState, peersReducer } from "../reducers/peerReducer";
+import { peersReducer, PeerState } from "../reducers/peerReducer";
 import { IPeer } from "../types/peer";
 import { ws } from "../ws";
 import { UserContext } from "./UserContext";
@@ -17,6 +17,9 @@ interface RoomValue {
   screenSharingId: string;
 }
 
+interface participantsProps {
+  participants: Record<string, IPeer>;
+}
 
 export const RoomContext = createContext<RoomValue>({
   peers: {},
@@ -27,38 +30,35 @@ export const RoomContext = createContext<RoomValue>({
 });
 
 interface ChildProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 if (!!window.Cypress) {
   window.Peer = Peer;
 }
 
-
-export const RoomProvider: React.FC<ChildProps> = ({ children }) => {
+export const RoomProvider = ({ children }: ChildProps) => {
   const navigate = useNavigate();
   const { userName, userId } = useContext(UserContext);
+  const [peers, dispatch] = useReducer(peersReducer, {});
+
   const [me, setMe] = useState<Peer>();
   const [stream, setStream] = useState<MediaStream>();
   const [screenStream, setScreenStream] = useState<MediaStream>();
-  const [peers, dispatch] = useReducer(peersReducer, {});
-  const [screenSharingId, setScreenSharingId] = useState<string>("");
-  const [roomId, setRoomId] = useState<string>("");
+  const [screenSharingId, setScreenSharingId] = useState("");
+  const [roomId, setRoomId] = useState("");
+
   const enterRoom = ({ roomId }: { roomId: "string"; }) => {
-    // console.log({ roomId });
     navigate(`/room/${roomId}`);
   };
 
   const peerConnectionsRef = useRef<Map<string, RTCPeerConnection>>(new Map());
 
-  const getUsers = ({
-    participants
-  }: {
-    participants: Record<string, IPeer>;
-  }) => {
+  const getUsers = ({ participants }: participantsProps) => {
     // console.log({participants});
     dispatch(addAllPeersAction(participants));
   };
+
   const removePeer = (peerId: string) => {
     dispatch(removePeerStreamAction(peerId));
   };
@@ -91,7 +91,6 @@ export const RoomProvider: React.FC<ChildProps> = ({ children }) => {
       });
     }
   };
-
 
   const nameChangedHandler = ({ peerId, userName }: {
     peerId: string,

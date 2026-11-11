@@ -1,12 +1,14 @@
 import { NameInput } from "../common/name";
-import { Button } from "./common/Button";
 import { ws } from "../ws";
-export const Join: React.FC = () => {
+import { Button } from "./common/Button";
+
+export const Join = () => {
   // Join button
   // Join Room
   const createRoom = () => {
     ws.emit("create-room");
   };
+
   return (
     <div className="flex flex-col">
       <NameInput />

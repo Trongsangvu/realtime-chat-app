@@ -8,13 +8,13 @@ interface ButtonProps {
   type?: "submit" | "button" | "reset";
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   children,
   onClick,
   testId,
   className,
   type = "submit",
-}) => {
+}: ButtonProps) => {
   return (
     <button
       type={type}
@@ -23,7 +23,8 @@ export const Button: React.FC<ButtonProps> = ({
       className={classNames(
         "bg-slate-500 px-4 rounded-full text-xl hover:bg-slate-600 text-white",
         className
-      )}>
+      )}
+    >
       {children}
     </button>
   );

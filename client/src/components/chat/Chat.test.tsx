@@ -1,8 +1,6 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { Chat } from "./Chat";
 import { ChatProvider } from "../../context/ChatContext";
-
+import { Chat } from "./Chat";
 
 test("chat form adds message to the list", () => {
   render(
