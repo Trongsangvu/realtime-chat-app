@@ -110,6 +110,7 @@ export const RoomProvider = ({ children }: ChildProps) => {
       // port: 9000,
       // // port: 80,
       // path: "/"
+      host: process.env.REACT_APP_PEER_HOST || "localhost",
       port: process.env.REACT_APP_PEER_PORT ? parseInt(process.env.REACT_APP_PEER_PORT) : 9000,
       path: process.env.REACT_APP_PEER_PATH || "/",
       secure: process.env.REACT_APP_PEER_SECURE === "true"
