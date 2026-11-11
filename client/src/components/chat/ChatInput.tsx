@@ -1,8 +1,8 @@
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { RoomContext } from "../../context/RoomContext";
 import { UserContext } from "../../context/UserContext";
-import { Button } from "../common/Button";
 
 export const ChatInput = () => {
   const [message, setMessage] = useState("");
@@ -11,33 +11,38 @@ export const ChatInput = () => {
   const { roomId } = useContext(RoomContext);
 
   return (
-    <div>
-      <form onSubmit={(e) => {
+    <form
+      className="border-t border-brand-100 p-3"
+      onSubmit={(e) => {
         e.preventDefault();
+        if (!message.trim()) return;
         sendMessage(message, roomId, userId);
         setMessage("");
-      }}>
-        <div className="flex">
-          <textarea
-            className="border rounded"
-            onChange={e => setMessage(e.target.value)}
-            value={message} />
-          <Button testId="send-msg-button" type="submit" className="bg-rose-400 p-2 mx-2 rounded-lg text-xl hover:bg-rose-600 text-white">
-            <svg
-              style={{}}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-            </svg>
-
-          </Button>
-        </div>
-
-      </form>
-    </div>
+      }}
+    >
+      <div className="flex items-end gap-2">
+        <textarea
+          rows={1}
+          placeholder="Send a message"
+          className="max-h-28 flex-1 resize-none rounded-xl border border-brand-100 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              e.currentTarget.form?.requestSubmit();
+            }
+          }}
+          value={message}
+        />
+        <button
+          type="submit"
+          data-testid="send-msg-button"
+          aria-label="Send message"
+          className="btn-gradient flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white shadow-card transition hover:brightness-110"
+        >
+          <PaperAirplaneIcon className="h-4 w-4" />
+        </button>
+      </div>
+    </form>
   );
 };

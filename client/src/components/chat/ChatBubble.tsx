@@ -13,43 +13,34 @@ export const ChatBubble = ({ message }: ChatBubbleProps) => {
   const { userId } = useContext(UserContext);
 
   const author = message.author && peers[message.author]?.userName;
-  const userName = author || "Anonynmous";
+  const userName = author || "Anonymous";
   const isSelf = message.author === userId;
 
-  const time = new Date(message.timestamp).toLocaleTimeString();
+  const time = new Date(message.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
-
-    <div className={classNames("m-2 flex", {
-      "pl-1 justify-end": isSelf,
-      "pl-1 justify-start": !isSelf,
-    })}
-    >
-      <div className="flex flex-col">
-        <div className={classNames("inline-block py-2 px-4 rounded", {
-          "bg-red-200": isSelf,
-          "bg-red-300": !isSelf,
-        })}
+    <div className={classNames("flex flex-col", isSelf ? "items-end" : "items-start")}>
+      <div className="mb-0.5 text-[11px] font-medium text-ink-soft">
+        {isSelf ? "You" : userName}
+      </div>
+      <div
+        className={classNames(
+          "max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2 text-sm",
+          isSelf
+            ? "btn-gradient rounded-br-md text-white"
+            : "rounded-bl-md bg-white shadow-sm"
+        )}
+      >
+        {message.content}
+        <div
+          className={classNames("mt-0.5 text-[10px]", isSelf ? "text-white/70" : "text-ink-soft")}
         >
-          {message.content}
-          <div>
-            <div className={classNames("text-xs opacity-50", {
-              "text-right": isSelf,
-              "text-left": !isSelf,
-            })}
-            >
-              {time}
-            </div>
-          </div>
+          {time}
         </div>
       </div>
-      <div className={classNames("text-md", {
-        "text-right": isSelf,
-        "text-left": !isSelf,
-      })}
-      >
-        {isSelf ? "You" : userName}</div>
-      {/* {isSelf ? "You" : userName.toString()}</div> */}
     </div>
   );
 };

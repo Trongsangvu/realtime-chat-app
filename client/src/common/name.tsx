@@ -1,13 +1,19 @@
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
-export const NameInput = () => {
+interface NameInputProps {
+  onEnter?: () => void;
+}
+
+export const NameInput = ({ onEnter }: NameInputProps) => {
   const { userName, setUserName } = useContext(UserContext);
   return (
     <input
-      className="border rounded-md p-2 h-10 my-2 w-full"
-      placeholder="Enter your name"
+      className="w-full rounded-lg border border-brand-100 bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-ink-soft/60 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+      placeholder="How others will see you"
+      aria-label="Your name"
       onChange={(e) => setUserName(e.target.value)}
+      onKeyDown={(e) => e.key === "Enter" && onEnter?.()}
       value={userName}
     />
   );

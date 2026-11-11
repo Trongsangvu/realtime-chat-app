@@ -2,9 +2,17 @@ import { useEffect, useRef } from "react";
 
 interface VideoPlayerProps {
   stream?: MediaStream;
+  muted?: boolean;
+  className?: string;
+  mirror?: boolean;
 }
 
-export const VideoPlayer = ({ stream }: VideoPlayerProps) => {
+export const VideoPlayer = ({
+  stream,
+  muted = true,
+  className = "",
+  mirror,
+}: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -14,11 +22,11 @@ export const VideoPlayer = ({ stream }: VideoPlayerProps) => {
   return (
     <video
       data-testid="peer-video"
-      style={{ width: "100%" }}
+      className={`h-full w-full object-cover ${mirror ? "-scale-x-100" : ""} ${className}`}
       ref={videoRef}
       autoPlay
-      muted={true}
+      playsInline
+      muted={muted}
     />
   );
-}
-
+};
